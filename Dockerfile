@@ -20,18 +20,18 @@ RUN apt-get update \
 	&& apt-get install -y curl bzip2 libasound2 \
 	&& apt-get clean && apt-get autoclean
 
-# Grab installer
+# Grab installer and script to run it
 ADD ${ROON_INSTALLER_URL} /tmp
+COPY run_installer.sh /tmp
 
 # Fix installer permissions
-RUN chmod 700 /tmp/${ROON_INSTALLER}
+RUN chmod 700 /tmp/${ROON_INSTALLER} /tmp/run_installer.sh
 
-# Run installer, answer "yes"
-CMD printf "y\ny\n" | /tmp/${ROON_INSTALLER} || true
+# Run the installer, answer "yes" and ignore errors
+RUN /tmp/run_installer.sh
 
 # Your Roon data will be stored in /var/roon
 VOLUME [ "/var/roon" ]
 
 # This starts Roon when the container runs
 ENTRYPOINT /opt/RoonBridge/start.sh
-
