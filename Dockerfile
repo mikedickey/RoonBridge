@@ -11,9 +11,13 @@ MAINTAINER mike@mikedickey.com
 ENV ROON_INSTALLER roonbridge-installer-linuxx64.sh
 ENV ROON_INSTALLER_URL http://download.roonlabs.com/builds/${ROON_INSTALLER}
 
+# These are expected by Roon's startup script
+ENV ROON_DATAROOT /var/roon
+ENV ROON_ID_DIR /var/roon
+
 # Install prerequisite packages
 RUN apt-get update \
-	&& apt-get install -y curl libasound2 \
+	&& apt-get install -y curl bzip2 libasound2 \
 	&& apt-get clean && apt-get autoclean
 
 # Grab installer
@@ -27,3 +31,7 @@ CMD printf "y\ny\n" | /tmp/${ROON_INSTALLER} && tail -f /dev/null
 
 # Your Roon data will be stored in /var/roon
 VOLUME [ "/var/roon" ]
+
+# This starts Roon when the container runs
+ENTRYPOINT /opt/RoonBridge/start.sh
+
