@@ -9,4 +9,4 @@ Note: I have not tested this, but seems like it should work =)
 
 Example:
 
-    docker run --name RoonBridge --net=host -v /home/roon:/var/roon mikedickey/roonbridge
+    docker run --name RoonBridge --net=host -d -v /home/roon:/var/roon mikedickey/roonbridge
